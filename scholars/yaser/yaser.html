@@ -1,0 +1,141 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>الشيخ ياسر الدوسري - القرآن الكريم</title>
+    <link rel="stylesheet" href="../../css/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../css/components.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.0/css/all.min.css" integrity="sha512-ApSLB1Pd3/bZN8fWB/RG9YhN/7bd9Hkf3AGaE2mPfebjrxagjuBtx2GcgdqIlJkUzwylBo61r9Xa9NmgBI0swA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!-- ستايل الواجهة الزجاجية (ضعه في نفس مجلد css) -->
+    <link rel="stylesheet" href="../../css/scholar-glass.css" />
+    <link rel="icon" href="../../imges/logo.ico" />
+  </head>
+  <body>
+    <site-header></site-header>
+
+    <!-- خلفية متحركة -->
+    <div class="gl-bg" aria-hidden="true">
+      <span class="gl-orb o1"></span>
+      <span class="gl-orb o2"></span>
+      <span class="gl-orb o3"></span>
+    </div>
+
+    <main class="gl-page">
+      <!-- بطاقة القارئ -->
+      <section class="gl-card gl-hero">
+        <div class="gl-hero-photo">
+          <img src="../../imges/yaser.jpg" alt="الشيخ ياسر الدوسري" />
+        </div>
+        <div class="gl-hero-text">
+          <span class="gl-eyebrow"><i class="fa-solid fa-microphone-lines"></i> قارئ</span>
+          <h1>الشيخ ياسر الدوسري</h1>
+          <p>اختر نوع التلاوة والسورة اللي تريّحك</p>
+        </div>
+      </section>
+
+      <!-- اختيار نوع التلاوة -->
+      <section class="gl-card gl-tabs-wrap">
+        <div class="gl-tabs-label"><i class="fa-solid fa-sliders"></i> اختر التلاوة</div>
+        <div class="gl-tabs" id="rec-tabs" data-active="0" role="tablist">
+          <span class="gl-tab-indicator"></span>
+          <button type="button" class="gl-tab active" data-rec="main" role="tab" aria-selected="true">
+            <i class="fa-solid fa-book-quran"></i>
+            <span>التلاوة الأساسية<small>كل السور</small></span>
+          </button>
+          <button type="button" class="gl-tab" data-rec="murattal" role="tab" aria-selected="false">
+            <i class="fa-solid fa-wave-square"></i>
+            <span>التلاوة المرتلة<small>قيد التسجيل</small></span>
+          </button>
+        </div>
+      </section>
+
+      <div class="gl-layout">
+        <!-- المشغل -->
+        <section class="gl-card gl-player" id="gl-player">
+          <div class="gl-disc-stage">
+            <span class="gl-pulse"></span>
+            <span class="gl-pulse p2"></span>
+            <div class="gl-disc">
+              <img src="../../imges/yaser.jpg" alt="الشيخ ياسر الدوسري" />
+            </div>
+          </div>
+
+          <h3 class="gl-now-surah" id="current-surah">اختر سورة للاستماع</h3>
+          <div class="gl-now-sub" id="current-sub">التلاوة الأساسية</div>
+
+          <div class="gl-wave" id="gl-wave" aria-hidden="true"></div>
+
+          <div class="gl-progress">
+            <span id="current-time">00:00</span>
+            <input type="range" id="progress" min="0" max="100" step="0.1" value="0" aria-label="التقدم" />
+            <span id="duration">00:00</span>
+          </div>
+
+          <div class="gl-controls">
+            <a id="download-btn" class="gl-btn" href="#" download target="_blank" rel="noopener" title="تحميل">
+              <i class="fa-solid fa-download"></i>
+            </a>
+            <button type="button" id="next-btn" class="gl-btn" title="السورة التالية" aria-label="السورة التالية">
+              <i class="fa-solid fa-forward-step fa-flip-horizontal"></i>
+            </button>
+            <button type="button" id="play-pause" class="gl-btn gl-btn-play" aria-label="تشغيل/إيقاف">
+              <i class="fa-solid fa-play"></i>
+            </button>
+            <button type="button" id="prev-btn" class="gl-btn" title="السورة السابقة" aria-label="السورة السابقة">
+              <i class="fa-solid fa-backward-step fa-flip-horizontal"></i>
+            </button>
+            <button type="button" id="repeat-btn" class="gl-btn" title="تكرار السورة" aria-pressed="false">
+              <i class="fa-solid fa-repeat"></i>
+            </button>
+          </div>
+
+          <audio id="quran-audio" preload="none">متصفحك لا يدعم تشغيل الصوت.</audio>
+        </section>
+
+        <!-- قائمة السور -->
+        <section class="gl-card gl-surahs">
+          <div class="gl-surahs-head">
+            <h2>السور</h2>
+            <span class="gl-chip" id="surah-count">114 سورة</span>
+          </div>
+
+          <div class="gl-note" id="gl-note">
+            <i class="fa-solid fa-circle-info"></i>
+            <span id="gl-note-text"></span>
+          </div>
+
+          <label class="gl-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="search" id="surah-search" placeholder="ابحث عن سورة بالاسم أو الرقم..." autocomplete="off" />
+          </label>
+
+          <ul class="gl-list" id="surah-list"></ul>
+        </section>
+      </div>
+    </main>
+
+    <div class="gl-toast" id="gl-toast" role="status" aria-live="polite">
+      <i class="fa-solid fa-lock"></i><span id="gl-toast-text"></span>
+    </div>
+
+    <bottom-nav></bottom-nav>
+    <script src="../../js/components.js"></script>
+    <script src="scholar.js"></script>
+    <script src="../../js/site-ui.js"></script>
+  </body>
+</html>

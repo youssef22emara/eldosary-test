@@ -1,0 +1,720 @@
+/* =========================================================
+   صفحة القارئ — واجهة Glass بانيميشن
+   بنفس ألوان الموقع (emerald / teal) ومتوافقة مع الوضع الداكن
+   كل الكلاسات بادئة بـ gl- عشان ما تتعارض مع components.css
+========================================================= */
+
+.gl-page {
+  --gl-bg: rgba(255, 255, 255, 0.55);
+  --gl-bg-strong: rgba(255, 255, 255, 0.75);
+  --gl-border: rgba(255, 255, 255, 0.65);
+  --gl-inner: rgba(16, 185, 129, 0.08);
+  --gl-shadow: 0 10px 40px rgba(16, 185, 129, 0.12), 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  position: relative;
+  width: min(1100px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 24px 0 48px;
+  display: grid;
+  gap: 22px;
+}
+
+[data-theme="dark"] .gl-page {
+  --gl-bg: rgba(17, 26, 22, 0.55);
+  --gl-bg-strong: rgba(17, 26, 22, 0.8);
+  --gl-border: rgba(255, 255, 255, 0.09);
+  --gl-inner: rgba(16, 185, 129, 0.1);
+  --gl-shadow: 0 10px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(16, 185, 129, 0.04);
+}
+
+/* ---------- خلفية متحركة (أضواء) ---------- */
+.gl-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gl-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.45;
+  animation: glFloat 18s ease-in-out infinite;
+}
+
+.gl-orb.o1 { width: 340px; height: 340px; background: var(--emerald); top: 6%; right: -80px; }
+.gl-orb.o2 { width: 300px; height: 300px; background: var(--teal); bottom: 8%; left: -90px; animation-delay: -6s; }
+.gl-orb.o3 { width: 220px; height: 220px; background: var(--emerald-light); top: 48%; left: 38%; opacity: 0.25; animation-delay: -11s; }
+
+[data-theme="dark"] .gl-orb { opacity: 0.3; }
+[data-theme="dark"] .gl-orb.o3 { opacity: 0.16; }
+
+@keyframes glFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -50px) scale(1.08); }
+  66% { transform: translate(-35px, 35px) scale(0.94); }
+}
+
+/* ---------- كارت زجاجي عام ---------- */
+.gl-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--gl-bg);
+  border: 1px solid var(--gl-border);
+  border-radius: 28px;
+  box-shadow: var(--gl-shadow);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+  backdrop-filter: blur(22px) saturate(150%);
+  animation: glRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* لمعة زجاجية */
+.gl-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, transparent 38%);
+  opacity: 0.7;
+}
+
+[data-theme="dark"] .gl-card::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, transparent 38%);
+}
+
+.gl-card > * { position: relative; }
+
+@keyframes glRise {
+  from { opacity: 0; transform: translateY(26px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------- بطاقة القارئ ---------- */
+.gl-hero {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 22px 26px;
+}
+
+.gl-hero-photo {
+  width: 104px;
+  height: 104px;
+  flex: 0 0 104px;
+  border-radius: 50%;
+  padding: 4px;
+  background: linear-gradient(135deg, var(--emerald), var(--teal), var(--emerald-light));
+  box-shadow: 0 8px 28px rgba(16, 185, 129, 0.35);
+}
+
+.gl-hero-photo img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--card);
+  display: block;
+}
+
+.gl-hero-text { min-width: 0; }
+
+.gl-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--emerald);
+  background: var(--emerald-glow);
+  border: 1px solid var(--border2);
+  border-radius: 99px;
+  padding: 4px 12px;
+  margin-bottom: 10px;
+}
+
+.gl-hero h1 {
+  font-size: clamp(24px, 4vw, 34px);
+  font-weight: 800;
+  line-height: 1.3;
+  color: var(--text);
+}
+
+.gl-hero p {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--text3);
+}
+
+/* ---------- اختيار نوع التلاوة ---------- */
+.gl-tabs-wrap {
+  padding: 16px 18px;
+  animation-delay: 0.08s;
+}
+
+.gl-tabs-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text3);
+  margin-bottom: 12px;
+}
+
+.gl-tabs-label i { color: var(--emerald); }
+
+.gl-tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 18px;
+  background: var(--gl-inner);
+  border: 1px solid var(--border2);
+}
+
+/* المؤشر المتحرك */
+.gl-tab-indicator {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  right: 5px;
+  width: calc(50% - 7px);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--emerald-dark), var(--emerald));
+  box-shadow: 0 8px 22px rgba(16, 185, 129, 0.35);
+  transition: transform 0.45s cubic-bezier(0.68, -0.2, 0.27, 1.2);
+}
+
+.gl-tabs[data-active="1"] .gl-tab-indicator {
+  transform: translateX(calc(-100% - 4px));
+}
+
+.gl-tab {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 52px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  color: var(--text2);
+  font-size: 14px;
+  font-weight: 700;
+  transition: color 0.3s;
+}
+
+.gl-tab small {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.gl-tab.active { color: #fff; }
+.gl-tab:not(.active):hover { color: var(--emerald); }
+.gl-tab i { font-size: 17px; }
+
+/* ---------- التخطيط ---------- */
+.gl-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+  gap: 22px;
+  align-items: start;
+}
+
+/* ---------- المشغل ---------- */
+.gl-player {
+  padding: 28px 24px 24px;
+  text-align: center;
+  animation-delay: 0.16s;
+}
+
+.gl-disc-stage {
+  position: relative;
+  width: 210px;
+  height: 210px;
+  margin: 0 auto 22px;
+  display: grid;
+  place-items: center;
+}
+
+.gl-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--emerald);
+  opacity: 0;
+}
+
+.gl-player.is-playing .gl-pulse { animation: glPulse 2.6s ease-out infinite; }
+.gl-player.is-playing .gl-pulse.p2 { animation-delay: 1.3s; }
+
+@keyframes glPulse {
+  0% { transform: scale(0.82); opacity: 0.55; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+
+.gl-disc {
+  position: relative;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(from 0deg, var(--emerald), var(--teal), var(--emerald-light), var(--emerald));
+  box-shadow: 0 14px 44px rgba(16, 185, 129, 0.35);
+  animation: glSpin 9s linear infinite;
+  animation-play-state: paused;
+}
+
+.gl-player.is-playing .gl-disc { animation-play-state: running; }
+
+.gl-disc img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid var(--card);
+}
+
+.gl-disc::after {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 3px solid var(--emerald);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+}
+
+@keyframes glSpin { to { transform: rotate(360deg); } }
+
+.gl-now-surah {
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.gl-now-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text3);
+  min-height: 18px;
+}
+
+/* موجة الصوت */
+.gl-wave {
+  height: 54px;
+  margin: 16px 0 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  direction: ltr;
+}
+
+.gl-wave span {
+  width: 4px;
+  height: var(--h, 20px);
+  min-height: 6px;
+  border-radius: 99px;
+  background: linear-gradient(to top, var(--emerald-dark), var(--emerald-light));
+  opacity: 0.35;
+  transform: scaleY(0.4);
+  transform-origin: center;
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+.gl-player.is-playing .gl-wave span {
+  opacity: 0.9;
+  animation: glWave 1.3s ease-in-out infinite;
+}
+
+.gl-wave span:nth-child(3n) { animation-delay: -0.3s !important; }
+.gl-wave span:nth-child(4n) { animation-delay: -0.6s !important; }
+.gl-wave span:nth-child(5n) { animation-delay: -0.9s !important; }
+
+@keyframes glWave {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+/* شريط التقدم */
+.gl-progress {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  gap: 10px;
+  direction: ltr;
+  margin-bottom: 20px;
+}
+
+.gl-progress span {
+  font-size: 11px;
+  color: var(--text3);
+  font-variant-numeric: tabular-nums;
+}
+
+.gl-progress input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 99px;
+  cursor: pointer;
+  outline: none;
+  background: linear-gradient(to right, var(--emerald) var(--p, 0%), var(--gl-inner) var(--p, 0%));
+  border: 1px solid var(--border2);
+}
+
+.gl-progress input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--emerald);
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.5);
+  transition: transform 0.2s;
+}
+
+.gl-progress input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.25); }
+
+.gl-progress input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--emerald);
+}
+
+/* أزرار التحكم */
+.gl-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px 14px;
+  width: fit-content;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: var(--gl-inner);
+  border: 1px solid var(--border2);
+}
+
+.gl-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  color: var(--text2);
+  background: var(--gl-bg-strong);
+  border: 1px solid var(--border);
+  transition: transform 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.gl-btn:hover {
+  transform: translateY(-2px);
+  color: var(--emerald);
+  background: var(--emerald-glow);
+  border-color: var(--border2);
+}
+
+.gl-btn.active {
+  color: #fff;
+  background: var(--emerald);
+  border-color: var(--emerald);
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.4);
+}
+
+.gl-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+.gl-btn-play {
+  width: 66px;
+  height: 66px;
+  border-radius: 22px;
+  font-size: 22px;
+  color: #fff;
+  border: 0;
+  background: linear-gradient(135deg, var(--emerald-dark), var(--emerald));
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+}
+
+.gl-btn-play:hover {
+  color: #fff;
+  background: linear-gradient(135deg, var(--emerald), var(--emerald-light));
+  box-shadow: 0 16px 36px rgba(16, 185, 129, 0.5);
+}
+
+.gl-btn-play:active { transform: scale(0.94); }
+
+/* ---------- قائمة السور ---------- */
+.gl-surahs {
+  padding: 22px;
+  animation-delay: 0.24s;
+}
+
+.gl-surahs-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.gl-surahs-head h2 {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.gl-chip {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--emerald);
+  background: var(--emerald-glow);
+  border: 1px solid var(--border2);
+  border-radius: 99px;
+  padding: 5px 11px;
+  white-space: nowrap;
+}
+
+/* ملاحظة تقدّم التسجيل */
+.gl-note {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.6;
+  color: var(--text2);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.gl-note.show { display: flex; animation: glRise 0.4s ease both; }
+.gl-note i { color: #f59e0b; font-size: 15px; }
+
+.gl-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 14px;
+  margin-bottom: 12px;
+  border-radius: 16px;
+  background: var(--gl-inner);
+  border: 1px solid var(--border2);
+  transition: box-shadow 0.25s, border-color 0.25s;
+}
+
+.gl-search:focus-within {
+  border-color: var(--emerald);
+  box-shadow: 0 0 0 4px var(--emerald-glow);
+}
+
+.gl-search i { color: var(--emerald); }
+
+.gl-search input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+}
+
+.gl-search input::placeholder { color: var(--text4); }
+
+.gl-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  max-height: 460px;
+  overflow-y: auto;
+  padding: 3px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--emerald) transparent;
+}
+
+.gl-list::-webkit-scrollbar { width: 5px; }
+
+.gl-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text2);
+  cursor: pointer;
+  background: var(--gl-bg-strong);
+  border: 1px solid var(--border);
+  transition: transform 0.2s, background 0.2s, border-color 0.2s, color 0.2s;
+  animation: glItemIn 0.4s ease both;
+  animation-delay: calc(var(--i, 0) * 12ms);
+}
+
+@keyframes glItemIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.gl-num {
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text3);
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.gl-name { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.gl-item:hover:not(.locked),
+.gl-item.active {
+  transform: translateY(-2px);
+  color: var(--emerald);
+  background: var(--emerald-glow2);
+  border-color: var(--border2);
+}
+
+.gl-item:hover:not(.locked) .gl-num,
+.gl-item.active .gl-num {
+  color: #fff;
+  background: var(--emerald);
+  border-color: var(--emerald);
+}
+
+.gl-item.active { box-shadow: 0 6px 18px rgba(16, 185, 129, 0.2); }
+
+/* السور المقفلة */
+.gl-item.locked {
+  cursor: not-allowed;
+  opacity: 0.62;
+  background: var(--gl-inner);
+  border-style: dashed;
+}
+
+.gl-lock {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #b45309;
+  background: rgba(245, 158, 11, 0.16);
+  border-radius: 99px;
+  padding: 3px 7px;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .gl-lock { color: #fbbf24; }
+
+.gl-item.shake { animation: glShake 0.4s ease; }
+
+@keyframes glShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.gl-empty {
+  grid-column: 1 / -1;
+  display: grid;
+  place-items: center;
+  gap: 6px;
+  padding: 36px 10px;
+  color: var(--text3);
+  font-size: 13px;
+  text-align: center;
+}
+
+.gl-empty i { font-size: 26px; color: var(--emerald); }
+
+/* ---------- Toast ---------- */
+.gl-toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--nav-h) + 24px);
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 20px;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--gl-bg-strong);
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow-lg);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  transform: translate(-50%, 30px);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s;
+}
+
+.gl-toast i { color: #f59e0b; }
+.gl-toast.show { transform: translate(-50%, 0); opacity: 1; }
+
+@media (min-width: 900px) {
+  .gl-toast { bottom: 28px; }
+}
+
+/* ---------- موبايل ---------- */
+@media (max-width: 860px) {
+  .gl-layout { grid-template-columns: 1fr; }
+  .gl-list { max-height: 420px; }
+}
+
+@media (max-width: 560px) {
+  .gl-page { width: calc(100% - 20px); padding-top: 14px; gap: 16px; }
+  .gl-card { border-radius: 22px; }
+  .gl-hero { flex-direction: column; text-align: center; padding: 20px 16px; gap: 14px; }
+  .gl-hero-photo { width: 92px; height: 92px; flex-basis: 92px; }
+  .gl-player { padding: 22px 14px 18px; }
+  .gl-disc-stage { width: 180px; height: 180px; }
+  .gl-disc { width: 146px; height: 146px; }
+  .gl-disc img { width: 128px; height: 128px; }
+  .gl-surahs { padding: 16px 14px; }
+  .gl-list { grid-template-columns: 1fr; }
+  .gl-controls { gap: 8px; padding: 8px 10px; }
+  .gl-btn { width: 42px; height: 42px; }
+  .gl-btn-play { width: 60px; height: 60px; }
+  .gl-tab { font-size: 13px; }
+}
+
+/* احترام تفضيل تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  .gl-orb, .gl-disc, .gl-pulse, .gl-wave span, .gl-card, .gl-item { animation: none !important; }
+  .gl-card, .gl-item { opacity: 1; }
+}
